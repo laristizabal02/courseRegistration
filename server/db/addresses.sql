@@ -1,8 +1,8 @@
--- Table: public.address
+-- Table: public.addresses
 
--- DROP TABLE IF EXISTS public.address;
+-- DROP TABLE IF EXISTS public.addresses;
 
-CREATE TABLE IF NOT EXISTS public.address
+CREATE TABLE IF NOT EXISTS public.addresses
 (
     address_id integer NOT NULL,
     address1 character varying(255) COLLATE pg_catalog."default" NOT NULL,
@@ -10,13 +10,13 @@ CREATE TABLE IF NOT EXISTS public.address
     city_name character varying(40) COLLATE pg_catalog."default" NOT NULL,
     state_code character varying(2) COLLATE pg_catalog."default" NOT NULL DEFAULT 'CO'::character varying,
     zip_code character varying(10) COLLATE pg_catalog."default",
-    CONSTRAINT address_pkey PRIMARY KEY (address_id)
+    CONSTRAINT addresses_pkey PRIMARY KEY (address_id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.address
+ALTER TABLE IF EXISTS public.addresses
     OWNER to postgres;
 
-COMMENT ON TABLE public.address
+COMMENT ON TABLE public.addresses
     IS 'Master table for holding addresses.';

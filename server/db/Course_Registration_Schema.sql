@@ -1,298 +1,238 @@
--- Table: public.school
--- Drop the table and sequence if they exist
-DROP TABLE IF EXISTS public.school;
-DROP SEQUENCE IF EXISTS public.school_id_seq;
+-- Table: public.courses
+-- Drop the course_offerings first. it depends on courses
+DROP TABLE IF EXISTS public.course_offerings;
 
--- Create the sequence
-CREATE SEQUENCE IF NOT EXISTS public.school_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
+DROP TABLE IF EXISTS public.courses;
 
--- Create the school table with a school_id column
-CREATE TABLE IF NOT EXISTS public.school
+--Create the table
+CREATE TABLE IF NOT EXISTS public.courses
 (
-    school_id integer NOT NULL DEFAULT nextval('school_id_seq'::regclass),
-    school_name character varying(40) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT school_pkey PRIMARY KEY (school_id)
+    course_id integer NOT NULL,
+    title character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    department_id integer NOT NULL,
+    CONSTRAINT courses_pkey PRIMARY KEY (course_id),
+	CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES public.departments(department_id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.school
+ALTER TABLE IF EXISTS public.courses
     OWNER to postgres;
 
-COMMENT ON TABLE public.school
+COMMENT ON TABLE public.courses
+    IS 'Master table for courses offered at the institution.';
+
+COMMENT ON COLUMN public.courses.title
+    IS 'The title for the course. Example: Calculus 101';
+
+COMMENT ON COLUMN public.courses.department_id
+    IS 'Foreign Key to the departments table.';
+
+-- Table: public.schools
+-- Drop the table if it exists
+DROP TABLE IF EXISTS public.schools;
+
+-- Create the schools table with a schools_id column
+CREATE TABLE IF NOT EXISTS public.schools
+(
+    school_id integer NOT NULL ,
+    school_name character varying(40) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT schools_pkey PRIMARY KEY (school_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.schools
+    OWNER to postgres;
+
+COMMENT ON TABLE public.schools
     IS 'Physical entity that houses instructors and course offerings.';
 
 
--- Alter the sequence to own the school_id column
-ALTER SEQUENCE public.school_id_seq
-    OWNED BY public.school.school_id;
+	
+-- Table: public.departments
+-- Drop the course_offerings first. it depends on courses
+DROP TABLE IF EXISTS public.course_offerings;
+-- The courses table depends on the departments table, so drop courses first
+-- Drop the courses table if it exists
+DROP TABLE IF EXISTS public.courses;
 
--- Set the owner of the sequence
-ALTER SEQUENCE public.school_id_seq
-    OWNER TO postgres;
+-- Drop the table if it exists
+DROP TABLE IF EXISTS public.departments;
+DROP SEQUENCE IF EXISTS public.departments_id_seq;
 
--- Table: public.department
--- Drop the the table then the sequence if they exist
-DROP TABLE IF EXISTS public.department;
-DROP SEQUENCE IF EXISTS public.department_id_seq;
-
---Create the sequence then the table
-CREATE SEQUENCE IF NOT EXISTS public.department_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-CREATE TABLE IF NOT EXISTS public.department
+CREATE TABLE IF NOT EXISTS public.departments
 (
-    department_id integer NOT NULL DEFAULT nextval('department_id_seq'::regclass),
+    department_id integer NOT NULL,
     department_name character varying(40) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT department_pkey PRIMARY KEY (department_id)
+    CONSTRAINT departments_pkey PRIMARY KEY (department_id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.department
+ALTER TABLE IF EXISTS public.departments
     OWNER to postgres;
 
-COMMENT ON TABLE public.department
+COMMENT ON TABLE public.departments
     IS 'The department in a school responsible for a course.';
+-- Table: public.courses
 
--- Alter the sequence to own the course_id column
-ALTER SEQUENCE public.department_id_seq
-    OWNED BY public.department.department_id;
-
--- Set the owner of the sequence
-ALTER SEQUENCE public.department_id_seq
-    OWNER TO postgres;
-
-
--- Table: public.course
--- Drop the the table then the sequence if they exist
-DROP TABLE IF EXISTS public.course;
-DROP SEQUENCE IF EXISTS public.course_id_seq;
-
---Create the sequence then the table
-CREATE SEQUENCE IF NOT EXISTS public.course_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-
-
-CREATE TABLE IF NOT EXISTS public.course
+--Create the table
+CREATE TABLE IF NOT EXISTS public.courses
 (
-    course_id integer NOT NULL DEFAULT nextval('course_id_seq'::regclass),
+    course_id integer NOT NULL,
     title character varying(100) COLLATE pg_catalog."default" NOT NULL,
     department_id integer NOT NULL,
-    CONSTRAINT course_pkey PRIMARY KEY (course_id)
+    CONSTRAINT courses_pkey PRIMARY KEY (course_id),
+	CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES public.departments(department_id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.course
+ALTER TABLE IF EXISTS public.courses
     OWNER to postgres;
 
-COMMENT ON TABLE public.course
+COMMENT ON TABLE public.courses
     IS 'Master table for courses offered at the institution.';
 
-COMMENT ON COLUMN public.course.title
+COMMENT ON COLUMN public.courses.title
     IS 'The title for the course. Example: Calculus 101';
 
-COMMENT ON COLUMN public.course.department_id
-    IS 'Foreign Key to the department table.';
+COMMENT ON COLUMN public.courses.department_id
+    IS 'Foreign Key to the departments table.';
 
--- Alter the sequence to own the course_id column
-ALTER SEQUENCE public.course_id_seq
-    OWNED BY public.course.course_id;
 
--- Set the owner of the sequence
-ALTER SEQUENCE public.course_id_seq
-    OWNER TO postgres;
+-- Table: public.course_offerings
 
--- Table: public.course_offering
--- Drop the the table then the sequence if they exist
-DROP TABLE IF EXISTS public.course_offering;
-DROP SEQUENCE IF EXISTS public.course_offering_id_seq;
-
---Create the sequence then the table
-CREATE SEQUENCE IF NOT EXISTS public.course_offering_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-	
-CREATE TABLE IF NOT EXISTS public.course_offering
+--Create the table
+CREATE TABLE IF NOT EXISTS public.course_offerings
 (
-    course_offering_id integer NOT NULL DEFAULT nextval('course_offering_id_seq'::regclass),
+    course_offering_id integer NOT NULL,
     course_id integer NOT NULL,
     location character varying(40) COLLATE pg_catalog."default" NOT NULL,
     days character varying(40) COLLATE pg_catalog."default" NOT NULL,
     start_time time without time zone NOT NULL,
     end_time time without time zone NOT NULL,
-    CONSTRAINT course_offering_pkey PRIMARY KEY (course_offering_id)
+    CONSTRAINT course_offerings_pkey PRIMARY KEY (course_offering_id),
+	CONSTRAINT fk_course FOREIGN KEY (course_id) REFERENCES public.courses(course_id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.course_offering
+ALTER TABLE IF EXISTS public.course_offerings
     OWNER to postgres; 
-	
--- Alter the sequence to own the course_offering_id column
-ALTER SEQUENCE public.course_offering_id_seq
-    OWNED BY public.course_offering.course_offering_id;
 
--- Set the owner of the sequence
-ALTER SEQUENCE public.course_offering_id_seq
-    OWNER TO postgres;
+-- Drop the the students table first. It depends on persons.
+DROP TABLE IF EXISTS public.students;
+-- Drop the guardians table first. It depends on persons.
+DROP TABLE IF EXISTS public.guardians;
 
--- Table: public.person
--- Drop the the table then the sequence if they exist
-DROP TABLE IF EXISTS public.person;
-DROP SEQUENCE IF EXISTS public.person_id_seq;
+-- Drop the persons table first. It depends on genders 
+DROP TABLE IF EXISTS public.persons;
 
---Create the sequence then the table
-CREATE SEQUENCE IF NOT EXISTS public.person_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
+-- Table: public.genders
+-- Drop the genders table if it exists 
+DROP TABLE IF EXISTS public.genders;
 
-CREATE TABLE IF NOT EXISTS public.person
+--Create the table
+CREATE TABLE IF NOT EXISTS public.genders
 (
-    person_id integer NOT NULL DEFAULT nextval('person_id_seq'::regclass),
+    gender_id integer NOT NULL,
+    gender_name character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT genders_pkey PRIMARY KEY (gender_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.genders
+    OWNER to postgres;
+
+	
+
+-- Table: public.persons
+
+--Create the table
+CREATE TABLE IF NOT EXISTS public.persons
+(
+    person_id integer NOT NULL,
     last_name character varying(40) COLLATE pg_catalog."default" NOT NULL,
     first_name character varying(40) COLLATE pg_catalog."default" NOT NULL,
     middle_name character varying(40) COLLATE pg_catalog."default",
     personal_title character varying(10) COLLATE pg_catalog."default",
     suffix character varying(10) COLLATE pg_catalog."default",
-    nickname character varying(30)[] COLLATE pg_catalog."default",
+    nickname character varying(30) COLLATE pg_catalog."default",
     gender_id integer,
     birth_date date,
-    comment text COLLATE pg_catalog."default",
-    CONSTRAINT person_pkey PRIMARY KEY (person_id)
+    comment_text text COLLATE pg_catalog."default",
+    CONSTRAINT persons_pkey PRIMARY KEY (person_id),
+	CONSTRAINT fk_gender FOREIGN KEY (gender_id) REFERENCES public.genders(gender_id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.person
+ALTER TABLE IF EXISTS public.persons
     OWNER to postgres;
 
-COMMENT ON TABLE public.person
+COMMENT ON TABLE public.persons
     IS 'Represents the base information for a person. A person can serve different roles. For example, parent, teacher, student, ....';
 
-COMMENT ON COLUMN public.person.person_id
-    IS 'Primary key for the person table.';
+COMMENT ON COLUMN public.persons.person_id
+    IS 'Primary key for the persons table.';
 
-COMMENT ON COLUMN public.person.personal_title
+COMMENT ON COLUMN public.persons.personal_title
     IS 'This is titles such as Jr., Sr. etc';
 
-COMMENT ON COLUMN public.person.suffix
+COMMENT ON COLUMN public.persons.suffix
     IS 'Dr., Mr., Ms., etc.';
 
--- Alter the sequence to own the person_id column
-ALTER SEQUENCE public.person_id_seq
-    OWNED BY public.person.person_id;
 
--- Set the owner of the sequence
-ALTER SEQUENCE public.person_id_seq
-    OWNER TO postgres;
+-- Table: public.guardians
+DROP SEQUENCE IF EXISTS public.guardians_id_seq;
 
--- Table: public.guardian
--- Drop the the table then the sequence if they exist
-DROP TABLE IF EXISTS public.guardian;
-DROP SEQUENCE IF EXISTS public.guardian_id_seq;
-
---Create the sequence then the table
-CREATE SEQUENCE IF NOT EXISTS public.guardian_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-
-CREATE TABLE IF NOT EXISTS public.guardian
+--Create the table
+CREATE TABLE IF NOT EXISTS public.guardians
 (
-    guardian_id integer NOT NULL DEFAULT nextval('guardian_id_seq'::regclass),
+    guardian_id integer NOT NULL,
     person_id integer NOT NULL,
     authorized_indicator character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
     emergency_indicator character(1) COLLATE pg_catalog."default" NOT NULL DEFAULT 'N'::bpchar,
-    CONSTRAINT guardian_pkey PRIMARY KEY (guardian_id)
+    CONSTRAINT guardians_pkey PRIMARY KEY (guardian_id),
+	CONSTRAINT fk_person FOREIGN KEY (person_id) REFERENCES public.persons(person_id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.guardian
+ALTER TABLE IF EXISTS public.guardians
     OWNER to postgres;
 
-COMMENT ON TABLE public.guardian
+COMMENT ON TABLE public.guardians
     IS 'This is a subtype of the person table.';
 
--- Alter the sequence to own the person_id column
-ALTER SEQUENCE public.guardian_id_seq
-    OWNED BY public.guardian.guardian_id;
 
--- Set the owner of the sequence
-ALTER SEQUENCE public.guardian_id_seq
-    OWNER TO postgres;
+-- Table: public.students
 
--- Table: public.student
--- Drop the the table then the sequence if they exist
-DROP TABLE IF EXISTS public.student;
-DROP SEQUENCE IF EXISTS public.student_id_seq;
-
---Create the sequence then the table
-CREATE SEQUENCE IF NOT EXISTS public.student_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-
-CREATE TABLE IF NOT EXISTS public.student
+--Create the table
+CREATE TABLE IF NOT EXISTS public.students
 (
-    student_id integer NOT NULL DEFAULT nextval('student_id_seq'::regclass),
+    student_id integer NOT NULL,
     person_id integer,
-    grade_id integer,
-    CONSTRAINT student_pkey PRIMARY KEY (student_id)
+    grade_name character varying(10) COLLATE pg_catalog."default",
+    CONSTRAINT students_pkey PRIMARY KEY (student_id),
+	CONSTRAINT fk_person FOREIGN KEY (person_id) REFERENCES public.persons(person_id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.student
+ALTER TABLE IF EXISTS public.students
     OWNER to postgres;
 
--- Alter the sequence to own the student_id column
-ALTER SEQUENCE public.student_id_seq
-    OWNED BY public.student.student_id;
-
-
--- Set the owner of the sequence
-ALTER SEQUENCE public.student_id_seq
-    OWNER TO postgres;
-
--- Table: public.address
+-- Table: public.addresses
 -- Drop the the table then the sequence if they exist
-DROP TABLE IF EXISTS public.address;
-DROP SEQUENCE IF EXISTS public.address_id_seq;
+DROP TABLE IF EXISTS public.addresses;
+DROP SEQUENCE IF EXISTS public.addresses_id_seq;
 
---Create the sequence then the table
-CREATE SEQUENCE IF NOT EXISTS public.address_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-
-CREATE TABLE IF NOT EXISTS public.address
+--Create the table
+CREATE TABLE IF NOT EXISTS public.addresses
 (
     address_id integer NOT NULL,
     address1 character varying(255) COLLATE pg_catalog."default" NOT NULL,
@@ -300,125 +240,94 @@ CREATE TABLE IF NOT EXISTS public.address
     city_name character varying(40) COLLATE pg_catalog."default" NOT NULL,
     state_code character varying(2) COLLATE pg_catalog."default" NOT NULL DEFAULT 'CO'::character varying,
     zip_code character varying(10) COLLATE pg_catalog."default",
-    CONSTRAINT address_pkey PRIMARY KEY (address_id)
+    CONSTRAINT addresses_pkey PRIMARY KEY (address_id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.address
+ALTER TABLE IF EXISTS public.addresses
     OWNER to postgres;
 
-COMMENT ON TABLE public.address
+COMMENT ON TABLE public.addresses
     IS 'Master table for holding addresses.';
 
--- Alter the sequence to own the address_id column
-ALTER SEQUENCE public.address_id_seq
-    OWNED BY public.address.address_id;
-
--- Set the owner of the sequence
-ALTER SEQUENCE public.address_id_seq
-    OWNER TO postgres;
-
--- Table: public.telecommunications_number
+-- Table: public.telecommunications_numbers
 -- Drop the the table then the sequence if they exist
-DROP TABLE IF EXISTS public.telecommunications_number;
-DROP SEQUENCE IF EXISTS public.telecommunications_number_id_seq;
+DROP TABLE IF EXISTS public.telecommunications_numbers;
+DROP SEQUENCE IF EXISTS public.telecommunications_numbers_id_seq;
 
---Create the sequence then the table
-CREATE SEQUENCE IF NOT EXISTS public.telecommunications_number_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-CREATE TABLE IF NOT EXISTS public.telecommunications_number
+--Create the table
+CREATE TABLE IF NOT EXISTS public.telecommunications_numbers
 (
-    telecommunications_number_id integer NOT NULL DEFAULT nextval('telecommunications_number_id_seq'::regclass),
+    telecommunications_number_id integer NOT NULL,
     area_code smallint NOT NULL,
     contact_number character varying(40) COLLATE pg_catalog."default" NOT NULL,
-    country_code integer,
-    CONSTRAINT telecommunications_number_pkey PRIMARY KEY (telecommunications_number_id)
+    country_code smallint,
+    CONSTRAINT telecommunications_numbers_pkey PRIMARY KEY (telecommunications_number_id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.telecommunications_number
+ALTER TABLE IF EXISTS public.telecommunications_numbers
     OWNER to postgres;
 
-COMMENT ON TABLE public.telecommunications_number
+COMMENT ON TABLE public.telecommunications_numbers
     IS 'Method of contacting by phone, etc. Examples: home phone, work phone, fax, mobile phone.';
 
--- Alter the sequence to own the telecommunications_number_id column
-ALTER SEQUENCE public.telecommunications_number_id_seq
-    OWNED BY public.telecommunications_number.telecommunications_number_id;
+-- Table: public.role_types
+-- Drop users first. It depends on role_types
+DROP TABLE IF EXISTS public.users;
+-- Drop the the table if it exists
+DROP TABLE IF EXISTS public.role_types;
 
--- Set the owner of the sequence
-ALTER SEQUENCE public.telecommunications_number_id_seq
-    OWNER TO postgres;
-
--- Table: public.role_type
--- Drop the the table then the sequence if they exist
-DROP TABLE IF EXISTS public.role_type;
-DROP SEQUENCE IF EXISTS public.role_type_id_seq;
-
---Create the sequence then the table
-CREATE SEQUENCE IF NOT EXISTS public.role_type_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-CREATE TABLE IF NOT EXISTS public.role_type
+--Create the table
+CREATE TABLE IF NOT EXISTS public.role_types
 (
-    role_type_id integer NOT NULL DEFAULT nextval('role_type_id_seq'::regclass),
+    role_type_id integer NOT NULL,
     description character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT role_type_pkey PRIMARY KEY (role_type_id)
+    CONSTRAINT role_types_pkey PRIMARY KEY (role_type_id)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.role_type
+ALTER TABLE IF EXISTS public.role_types
     OWNER to postgres;
 
--- Alter the sequence to own the role_type_id column
-ALTER SEQUENCE public.role_type_id_seq
-    OWNED BY public.role_type.role_type_id;
 
--- Set the owner of the sequence
-ALTER SEQUENCE public.role_type_id_seq
-    OWNER TO postgres;
+-- Table: public.users
 
--- Table: public.gender
--- Drop the the table then the sequence if they exist
-DROP TABLE IF EXISTS public.gender;
-DROP SEQUENCE IF EXISTS public.gender_id_seq;
 
---Create the sequence then the table
-CREATE SEQUENCE IF NOT EXISTS public.gender_id_seq
-    INCREMENT 1
-    START 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    CACHE 1;
-	
-CREATE TABLE IF NOT EXISTS public.gender
+CREATE TABLE IF NOT EXISTS public.users
 (
-    gender_id integer NOT NULL DEFAULT nextval('gender_id_seq'::regclass),
-    gender_name character varying(50) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT genders_pkey PRIMARY KEY (gender_id)
+    user_id integer NOT NULL,
+    person_id integer NOT NULL,
+    password_name character varying(40) COLLATE pg_catalog."default" NOT NULL,
+    role_type_id integer NOT NULL,
+    electronic_address_string character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT users_pkey PRIMARY KEY (user_id),
+	CONSTRAINT fk_role_type FOREIGN KEY (role_type_id) REFERENCES public.role_types(role_type_id)
+
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public.gender
+ALTER TABLE IF EXISTS public.users
     OWNER to postgres;
--- Alter the sequence to own the gender_id column
-ALTER SEQUENCE public.gender_id_seq
-    OWNED BY public.gender.gender_id;
 
--- Set the owner of the sequence
-ALTER SEQUENCE public.gender_id_seq
-    OWNER TO postgres;
+COMMENT ON TABLE public.users
+    IS 'This is the table used to log into the application.';
+
+COMMENT ON COLUMN public.users.person_id
+    IS 'Foreign key to the persons table.';
+	
+COMMENT ON COLUMN public.users.password_name
+    IS 'This is the password used to log into the application.';
+
+COMMENT ON COLUMN public.users.role_type_id
+    IS 'Foreign key to the role_types table.';
+
+COMMENT ON COLUMN public.users.electronic_address_string
+    IS 'The users email address. Example: johnsmith@school.com';
 
 /*
 
