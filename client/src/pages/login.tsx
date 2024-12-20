@@ -1,13 +1,39 @@
-import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { useState, FormEvent, ChangeEvent } from "react";
+import { login } from "../api/authApi";  // Import the login function from the API
+import { UserLogin } from "../interfaces/UserLogin";
+import Auth from '../utils/auth'; 
 
 const Login: React.FC = () => {
   const [role, setRole] = useState<'instructor' | 'parent' | null>(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [loginData, setLoginData] = useState<UserLogin>({
+    username: '',
+    password: ''
+  });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setLoginData({
+      ...loginData,
+      [name]: value
+    });
+  };
 
   const handleRoleSelection = (selectedRole: 'instructor' | 'parent') => {
     setRole(selectedRole);
+  };
+
+  // Handle form submission for login
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      // Call the login API endpoint with loginData
+      const data = await login(loginData);
+      // If login is successful, call Auth.login to store the token in localStorage
+      Auth.login(data.token);
+    } catch (err) {
+      console.error('Failed to login', err);  // Log any errors that occur during login
+    }
   };
 
   return (
@@ -31,14 +57,15 @@ const Login: React.FC = () => {
 
       {role && <h3>Login as {role === 'instructor' ? 'Instructor' : 'Parent/Guardian'}</h3>}
 
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formUsername">
           <Form.Label>Username</Form.Label>
           <Form.Control
             type="text"
             placeholder="Enter username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            name="username"
+            value={loginData.username || ""} 
+            onChange={handleChange}
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="formPassword">
@@ -46,11 +73,14 @@ const Login: React.FC = () => {
           <Form.Control
             type="password"
             placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            name="password"
+            value={loginData.password || ""}
+            onChange={handleChange}
           />
         </Form.Group>
-        <Button variant="success">Login</Button>
+        <Button variant="primary" type="submit">
+          Login
+        </Button>
       </Form>
     </div>
   );
