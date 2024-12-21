@@ -1,6 +1,8 @@
 import express from 'express';
 import sequelize from './config/connection.js';
 import routes from './routes/index.js';
+import './models'; // Import your models first
+import './models/associations.js'; // Import associations after models
 
 const app = express();
 const PORT = process.env.PORT || 3001;
