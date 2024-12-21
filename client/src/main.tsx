@@ -8,7 +8,8 @@ import ErrorPage from './pages/error.tsx';
 import Login from './pages/login.tsx';
 import './index.css'
 import App from './App.tsx'
-
+import InstructorPage from './pages/instructorPage.tsx';
+import ParentPage from './pages/parentPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -21,8 +22,12 @@ const router = createBrowserRouter([
         element: <Login />
       }, 
       {
-        path: '/login',
-        element: <Login />
+        path: '/instructor',
+        element: <InstructorPage />
+      }, 
+      {
+        path: '/parent',
+        element: <ParentPage />
       }, 
     ]
   }

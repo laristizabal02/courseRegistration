@@ -1,16 +1,20 @@
 import { Form, Button } from 'react-bootstrap';
 import { useState, FormEvent, ChangeEvent } from "react";
-import { login } from "../api/authApi";  // Import the login function from the API
+import { login } from "../api/authAPI";  // Import the login function from the API
 import { UserLogin } from "../interfaces/UserLogin";
 import Auth from '../utils/auth'; 
+//import { Prev } from 'react-bootstrap/esm/PageItem';
+
 
 const Login: React.FC = () => {
-  const [role, setRole] = useState<'instructor' | 'parent' | null>(null);
+  const [role, setRole] = useState<'instructor' | 'parent' | null>('instructor');
   const [loginData, setLoginData] = useState<UserLogin>({
     username: '',
-    password: ''
+    password: '',
+    role: 'instructor' // Default role
   });
 
+  // Handle input changes for the login form
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setLoginData({
@@ -19,20 +23,34 @@ const Login: React.FC = () => {
     });
   };
 
+  // Handle role selection
   const handleRoleSelection = (selectedRole: 'instructor' | 'parent') => {
     setRole(selectedRole);
   };
 
-  // Handle form submission for login
+  // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // Map the role to corresponding numbers
+    const roleNumber = role === 'instructor' ? 1 : 2;
+
     try {
-      // Call the login API endpoint with loginData
-      const data = await login(loginData);
-      // If login is successful, call Auth.login to store the token in localStorage
+      // Update loginData with the numerical role value
+      const updatedLoginData = {
+        ...loginData,
+        role: roleNumber.toString() // Convert to string if API expects a string
+      };
+
+      console.log(updatedLoginData);
+
+      // Call the login API endpoint with the updated loginData
+      const data = await login(updatedLoginData);
+
+      // If login is successful, store the token in localStorage
       Auth.login(data.token);
     } catch (err) {
-      console.error('Failed to login', err);  // Log any errors that occur during login
+      console.error('Failed to login', err); // Log any errors during login
     }
   };
 
@@ -64,7 +82,7 @@ const Login: React.FC = () => {
             type="text"
             placeholder="Enter username"
             name="username"
-            value={loginData.username || ""} 
+            value={loginData.username || ""}
             onChange={handleChange}
           />
         </Form.Group>
