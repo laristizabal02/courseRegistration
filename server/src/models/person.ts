@@ -1,6 +1,5 @@
-import { DataTypes, Sequelize, Model } from 'sequelize';
+import { DataTypes, type Sequelize, Model, type Optional } from 'sequelize';
 
-type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 interface PersonAttributes {
     person_id: number;
     last_name: string;
@@ -91,3 +90,4 @@ export function PersonFactory(sequelize: Sequelize): typeof Person {
 
     return Person;
 } 
+export default Person;

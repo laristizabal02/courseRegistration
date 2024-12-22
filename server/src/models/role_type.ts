@@ -1,5 +1,4 @@
-import { DataTypes, Sequelize, Model } from 'sequelize';
-type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+import { DataTypes, type Sequelize, Model, type Optional } from 'sequelize';
 
 
 interface Role_typeAttributes {
@@ -39,3 +38,4 @@ export function Role_typeFactory(sequelize: Sequelize): typeof Role_type {
 
   return Role_type;
 }
+export default Role_type;

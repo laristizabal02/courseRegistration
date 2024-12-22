@@ -1,7 +1,10 @@
 import express from 'express';
 import sequelize from './config/connection.js';
 import routes from './routes/index.js';
-import './models'; // Import your models first
+import './models/index.js'; // Import your models first
+import './models/role_type.js'; // Import your models first
+import './models/person.js'; // Import your models first
+import './models/user.js'; // Import your models first
 import './models/associations.js'; // Import associations after models
 
 const app = express();
