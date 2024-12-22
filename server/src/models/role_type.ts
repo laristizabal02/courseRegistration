@@ -1,5 +1,4 @@
-import { DataTypes, Sequelize, Model } from 'sequelize';
-type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+import { DataTypes, type Sequelize, Model, type Optional } from 'sequelize';
 
 
 interface Role_typeAttributes {

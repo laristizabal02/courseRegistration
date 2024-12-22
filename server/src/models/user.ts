@@ -1,7 +1,5 @@
-import { DataTypes, type Sequelize, Model,type Optional } from 'sequelize';
+import { DataTypes, type Sequelize, Model, type Optional } from 'sequelize';
 import bcrypt from 'bcrypt';
-
-//type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 interface UserAttributes {
   user_id: number;
