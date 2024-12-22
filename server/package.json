@@ -35,5 +35,17 @@
     "@types/jsonwebtoken": "^9.0.6",
     "rimraf": "^6.0.1",
     "typescript": "^5.4.5"
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.15.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "globals": "^15.12.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^8.15.0",
+    "vite": "^6.0.1"
   }
+
+
 }
