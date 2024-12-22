@@ -7,9 +7,10 @@ interface UserAttributes {
   password: string;
   email: string;
   role_type_id: number;
+  //person_id: number;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'user_id'> {}
+interface UserCreationAttributes extends Optional<UserAttributes, 'user_id'> { }
 
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public user_id!: number;
@@ -17,6 +18,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public password!: string;
   public email!: string;
   public role_type_id!: number; // Use definite assignment assertion
+  //public person_id!: number; // Use definite assignment assertion
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
@@ -24,6 +26,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
     super(init); // Use UserCreationAttributes type
     if (init) {
       this.role_type_id = init.role_type_id || 0; // Default value if not provided
+      //this.person_id = init.person_id || 0; // Default value if not provided
     }
   }
 
@@ -62,7 +65,15 @@ export function UserFactory(sequelize: Sequelize): typeof User {
           key: 'role_type_id', // key in the target model that you're referencing
         },
       },
-    }, 
+      /* person_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'persons', // name of the target model
+          key: 'person_id', // key in the target model that you're referencing
+        },
+      }, */
+    },
     {
       tableName: 'users',
       sequelize,
