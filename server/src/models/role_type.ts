@@ -39,3 +39,4 @@ export function Role_typeFactory(sequelize: Sequelize): typeof Role_type {
 
   return Role_type;
 }
+export default Role_type;
