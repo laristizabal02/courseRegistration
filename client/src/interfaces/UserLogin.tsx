@@ -2,6 +2,6 @@
 export interface UserLogin {
     username: string | null;  // Property for storing username, nullable
     password: string | null;  // Property for storing password, nullable
-    role: string | null;
+    role_type_id: string | null;
   }
   

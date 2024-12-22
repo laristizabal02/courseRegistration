@@ -2,16 +2,16 @@ import { Form, Button } from 'react-bootstrap';
 import { useState, FormEvent, ChangeEvent } from "react";
 import { login } from "../api/authAPI";  // Import the login function from the API
 import { UserLogin } from "../interfaces/UserLogin";
-import Auth from '../utils/auth'; 
+
 //import { Prev } from 'react-bootstrap/esm/PageItem';
 
 
 const Login: React.FC = () => {
-  const [role, setRole] = useState<'instructor' | 'parent' | null>('instructor');
+  const [role_type_id, setRole] = useState<'instructor' | 'parent' | null>('instructor');
   const [loginData, setLoginData] = useState<UserLogin>({
     username: '',
     password: '',
-    role: 'instructor' // Default role
+    role_type_id: 'instructor' // Default role
   });
 
   // Handle input changes for the login form
@@ -31,26 +31,29 @@ const Login: React.FC = () => {
   // Handle form submission
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
-    // Map the role to corresponding numbers
-    const roleNumber = role === 'instructor' ? 1 : 2;
-
+  
+    const roleNumber = role_type_id === 'instructor' ? 1 : 2;
+  
     try {
-      // Update loginData with the numerical role value
       const updatedLoginData = {
         ...loginData,
-        role: roleNumber.toString() // Convert to string if API expects a string
+        role_type_id: roleNumber.toString(),
       };
-
-      console.log(updatedLoginData);
-
-      // Call the login API endpoint with the updated loginData
-      const data = await login(updatedLoginData);
-
-      // If login is successful, store the token in localStorage
-      Auth.login(data.token);
+  
+      const roleTypeId = await login(updatedLoginData);
+  
+      // Display a success alert
+      alert('Login successful! Redirecting to your dashboard...');
+  
+      // Redirect based on roleTypeId
+      if (roleTypeId === 1) {
+        window.location.assign('/instructor');
+      } else if (roleTypeId === 2) {
+        window.location.assign('/parent');
+      }
     } catch (err) {
-      console.error('Failed to login', err); // Log any errors during login
+      console.error('Failed to login', err);
+      alert('Failed to login. Please check your credentials.');
     }
   };
 
@@ -73,7 +76,7 @@ const Login: React.FC = () => {
         </Button>
       </div>
 
-      {role && <h3>Login as {role === 'instructor' ? 'Instructor' : 'Parent/Guardian'}</h3>}
+      {role_type_id && <h3>Login as {role_type_id === 'instructor' ? 'Instructor' : 'Parent/Guardian'}</h3>}
 
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formUsername">
