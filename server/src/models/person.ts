@@ -1,17 +1,5 @@
 import { DataTypes, type Sequelize, Model, type Optional } from 'sequelize';
-
-interface PersonAttributes {
-    person_id: number;
-    last_name: string;
-    first_name: string;
-    middle_name?: string;
-    personal_title: string;
-    suffix?: string;
-    nickname?: string;
-    gender_id: number;
-    birth_date: Date;
-    comment_text?: string;
-}
+import {PersonAttributes} from '../interfaces/Person.js';
 
 interface PersonCreationAttributes extends Optional<PersonAttributes, 'person_id'> { }
 
