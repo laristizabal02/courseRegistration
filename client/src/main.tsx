@@ -1,10 +1,8 @@
-//import { StrictMode } from 'react'
-//import { createRoot } from 'react-dom/client'
+import PrivateRoute from './utils/PrivateRoutes.tsx';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap styles
 import ErrorPage from './pages/error.tsx';
-//import Home from './pages/home.tsx';
 import Login from './pages/login.tsx';
 import './index.css'
 import App from './App.tsx'
@@ -27,11 +25,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/instructor',
-        element: <InstructorPage />
+        element: (<PrivateRoute>
+          <InstructorPage />
+        </PrivateRoute>),
       }, 
       {
         path: '/parent',
-        element: <ParentPage />
+        element: <PrivateRoute>
+        <ParentPage />
+      </PrivateRoute>
       }, 
     ]
   }

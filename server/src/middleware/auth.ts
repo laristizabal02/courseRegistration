@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 // Define the interface for the JWT payload
 interface JwtPayload {
   username: string;
+  role_type_id: number;
 }
 
 // Middleware function to authenticate JWT token
@@ -32,4 +33,17 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
   } else {
     res.sendStatus(401); // Send unauthorized status if no authorization header is present
   }
+};
+function isJwtPayload(user: any): user is JwtPayload {
+  return user && typeof user.username === 'string' && typeof user.role_type_id === 'number';
+}
+
+export const authorizeRole = (allowedRoles: number[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    // Check if req.user is valid and of type JwtPayload, and if role matches allowedRoles
+    if (!req.user || !isJwtPayload(req.user) || !allowedRoles.includes(req.user.role_type_id)) {
+      return res.sendStatus(403); // Forbidden if the user doesn't have the correct role or isn't authenticated
+    }
+    return next(); // If valid, allow access by calling next()
+  };
 };
