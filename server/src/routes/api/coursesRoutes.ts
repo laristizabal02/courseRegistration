@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { Course } from "../models/course.js"; 
-import { Department } from "../models/department.js";
+import { Course } from "../../models/course.js"; 
+import { Department } from "../../models/department.js";
 
 const router = Router();
 
@@ -95,4 +95,4 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-export default router;
+export { router as coursesRouter };
