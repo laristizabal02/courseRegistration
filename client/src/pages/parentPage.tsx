@@ -21,12 +21,14 @@ const ParentPage: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    // Clear any authentication-related data (if applicable)
+    const isConfirmed = window.confirm("Are you sure you want to Login?");
+    if (isConfirmed) {
     localStorage.removeItem("authToken");
     navigate("/login");
+    }
   };
   const handleAddStudent = async (name: string) => {
-    const response = await fetch("http://localhost:5000/students", {
+    const response = await fetch("http://localhost:3001/students", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name }),
@@ -38,7 +40,7 @@ const ParentPage: React.FC = () => {
   };
 
   const handleDeleteStudent = async (id: number) => {
-    const response = await fetch(`http://localhost:5000/students/${id}`, {
+    const response = await fetch(`http://localhost:3001/students/${id}`, {
       method: "DELETE",
     });
     if (response.ok) {
@@ -47,7 +49,7 @@ const ParentPage: React.FC = () => {
   };
 
   const handleUpdateStudent = async (id: number, updatedName: string) => {
-    const response = await fetch(`http://localhost:5000/students/${id}`, {
+    const response = await fetch(`http://localhost:3001/students/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: updatedName }),
@@ -61,7 +63,7 @@ const ParentPage: React.FC = () => {
   };
 
   const handleRegisterStudentToCourse = async (studentId: number, courseId: number) => {
-    const response = await fetch(`http://localhost:5000/students/${studentId}/register`, {
+    const response = await fetch(`http://localhost:3001/students/${studentId}/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ courseId }),
@@ -72,7 +74,7 @@ const ParentPage: React.FC = () => {
   };
 
   const handleViewCourses = async (studentId: number) => {
-    const response = await fetch(`http://localhost:5000/students/${studentId}/courses`);
+    const response = await fetch(`http://localhost:3001/students/${studentId}/courses`);
     const studentCourses = await response.json();
     alert(`Courses: ${studentCourses.map((course: Course) => course.title).join(", ")}`);
   };
@@ -80,7 +82,7 @@ const ParentPage: React.FC = () => {
   return (
     <div>
       <h1>Parent Page</h1>
-      <button onClick={handleLogout}>Logout</button>
+      <button onClick={handleLogout} className="logout-button">Logout</button>
       <div>
       
       
