@@ -41,8 +41,11 @@ const InstructorPage: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
+    const isConfirmed = window.confirm("Are you sure you want to Login?");
+    if (isConfirmed) {
     localStorage.removeItem("authToken");
     navigate("/login");
+    }
   };
 
   const handleAddCourse = async (title: string, department_id: number) => {
@@ -128,7 +131,7 @@ const InstructorPage: React.FC = () => {
   return (
     <div>
       <h1>Instructor Page</h1>
-      <button onClick={handleLogout}>Logout</button>
+      <button onClick={handleLogout} className="logout-button">Logout</button>
 
       <div>
         <button onClick={() => setAction("add")}>Add New Course</button>

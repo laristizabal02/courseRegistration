@@ -62,14 +62,14 @@ const Login: React.FC = () => {
       <h2>Select Role</h2>
       <div className="mb-3">
         <Button
-          variant="primary"
+          variant={role_type_id === 'instructor' ? 'primary' : 'outline-primary'}
           className="me-2"
           onClick={() => handleRoleSelection('instructor')}
         >
           Instructor
         </Button>
         <Button
-          variant="secondary"
+          variant={role_type_id === 'parent' ? 'primary' : 'outline-primary'}
           onClick={() => handleRoleSelection('parent')}
         >
           Parent/Guardian
