@@ -20,23 +20,24 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const { title, department_id } = req.body;
 
+  // Validate the input
   if (!title || !department_id) {
     return res.status(400).json({ error: "Title and department_id are required." });
   }
 
   try {
+    // Check if the department exists
     const department = await Department.findByPk(department_id);
     if (!department) {
       return res.status(404).json({ error: "Department not found." });
     }
 
-   // const newCourse = await Course.create({ title, department_id });
+    // Create the new course
+    const newCourse = await Course.create({ title, department_id });
 
-    // Optionally, fetch all courses after adding
-    const allCourses = await Course.findAll();
-    return res.status(201).json(allCourses); // Returns all courses
-    // Alternatively, return just the newly created course:
-    // return res.status(201).json(newCourse);
+    // Return the newly created course as the response
+    return res.status(201).json(newCourse); // Returns only the new course
+
   } catch (error) {
     console.error("Error adding course:", error);
     return res.status(500).json({ error: "Internal server error." });
