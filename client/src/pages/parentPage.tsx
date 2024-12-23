@@ -74,7 +74,7 @@ const ParentPage: React.FC = () => {
   const handleViewCourses = async (studentId: number) => {
     const response = await fetch(`http://localhost:5000/students/${studentId}/courses`);
     const studentCourses = await response.json();
-    alert(`Courses: ${studentCourses.map((course: Course) => course.name).join(", ")}`);
+    alert(`Courses: ${studentCourses.map((course: Course) => course.title).join(", ")}`);
   };
 
   return (
@@ -131,8 +131,8 @@ const ParentPage: React.FC = () => {
               >
                 <option value="">Select a course</option>
                 {courses.map((course) => (
-                  <option key={course.id} value={course.id}>
-                    {course.name}
+                  <option key={course.course_id} value={course.course_id}>
+                    {course.title}
                   </option>
                 ))}
               </select>
