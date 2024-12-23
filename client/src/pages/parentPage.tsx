@@ -1,170 +1,167 @@
 import React, { useState, useEffect } from "react";
 import { Student } from "../interfaces/Student";
-import { Course } from "../interfaces/CourseInt";
 import StudentForm from "../components/StudentForm";
 import { useNavigate } from "react-router-dom";
+import "./pages.css";
 
 const ParentPage: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [action, setAction] = useState<"add" | "delete" | "update" | "register" | "view" | "school" | null>(null);
+  const [action, setAction] = useState<"add" | "register" | "view" | "school" | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const studentResponse = await fetch("http://localhost:5000/students");
-      const courseResponse = await fetch("http://localhost:5000/courses");
-      setStudents(await studentResponse.json());
-      setCourses(await courseResponse.json());
+    const fetchStudents = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/students");
+        if (!response.ok) {
+          throw new Error("Error fetching students");
+        }
+        const studentsData = await response.json();
+        setStudents(studentsData);
+      } catch (error) {
+        console.error("Error fetching students:", error);
+      }
     };
-    fetchData();
+    fetchStudents();
   }, []);
 
   const handleLogout = () => {
-    const isConfirmed = window.confirm("Are you sure you want to Login?");
+    const isConfirmed = window.confirm("Are you sure you want to login?");
     if (isConfirmed) {
-    localStorage.removeItem("authToken");
-    navigate("/login");
+      localStorage.removeItem("authToken");
+      navigate("/login");
     }
   };
-  const handleAddStudent = async (name: string) => {
-    const response = await fetch("http://localhost:3001/students", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
-    });
-    if (response.ok) {
-      const newStudent = await response.json();
-      setStudents([...students, newStudent]);
+
+  const handleAddStudent = async (name: string, grade_name: string) => {
+    try {
+      const response = await fetch("http://localhost:3001/students", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, grade_name }),
+      });
+      if (response.ok) {
+        const newStudent = await response.json();
+        setStudents([...students, newStudent]);
+        setAction(null); // Reset action
+      }
+    } catch (error) {
+      console.error("Error adding student:", error);
     }
   };
 
   const handleDeleteStudent = async (id: number) => {
-    const response = await fetch(`http://localhost:3001/students/${id}`, {
-      method: "DELETE",
-    });
-    if (response.ok) {
-      setStudents(students.filter((student) => student.id !== id));
+    const isConfirmed = window.confirm("Are you sure you want to delete this student?");
+    if (isConfirmed) {
+      try {
+        const response = await fetch(`http://localhost:3001/students/${id}`, { method: "DELETE" });
+  
+        if (response.ok) {
+          const updatedStudents = await response.json(); // Assuming the server returns all students
+          setStudents(updatedStudents); // Update the state with the new list of students
+        } else {
+          const errorData = await response.json();
+          console.error("Error deleting student:", errorData.error);
+        }
+      } catch (error) {
+        console.error("Error deleting student:", error);
+      }
     }
   };
 
-  const handleUpdateStudent = async (id: number, updatedName: string) => {
-    const response = await fetch(`http://localhost:3001/students/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: updatedName }),
-    });
-    if (response.ok) {
-      const updatedStudent = await response.json();
-      setStudents(
-        students.map((student) => (student.id === id ? updatedStudent : student))
-      );
+  const handleUpdateStudent = async (id: number, updatedName: string, updatedGradeName: string) => {
+    console.log("Updating student:", id, updatedName, updatedGradeName); 
+    if (!updatedName || !updatedGradeName.trim()) {
+      alert("Both name and grade are required.");
+      return;
     }
-  };
-
-  const handleRegisterStudentToCourse = async (studentId: number, courseId: number) => {
-    const response = await fetch(`http://localhost:3001/students/${studentId}/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ courseId }),
-    });
-    if (response.ok) {
-      alert("Student registered successfully!");
+  
+    try {
+      const response = await fetch(`http://localhost:3001/students/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: updatedName, grade_name: updatedGradeName }),
+      });
+  
+      if (response.ok) {
+        const updatedStudents = await response.json(); // Assuming the server returns all students
+        setStudents(updatedStudents); // Update the state with the new list of students
+        setAction(null); // Reset the action after updating
+      } else {
+        const errorData = await response.json();
+        console.error("Error updating student:", errorData.error);
+      }
+    } catch (error) {
+      console.error("Error updating student:", error);
     }
-  };
-
-  const handleViewCourses = async (studentId: number) => {
-    const response = await fetch(`http://localhost:3001/students/${studentId}/courses`);
-    const studentCourses = await response.json();
-    alert(`Courses: ${studentCourses.map((course: Course) => course.title).join(", ")}`);
   };
 
   return (
     <div>
       <h1>Parent Page</h1>
       <button onClick={handleLogout} className="logout-button">Logout</button>
+
       <div>
-      
-      
         <button onClick={() => setAction("add")}>Add Student</button>
-        <button onClick={() => setAction("delete")}>Delete Student</button>
-        <button onClick={() => setAction("update")}>Update Student</button>
         <button onClick={() => setAction("register")}>Register Student to Course</button>
         <button onClick={() => setAction("view")}>View Courses for Student</button>
-        <button onClick={() => setAction("school")}>Check school</button>
+        <button onClick={() => setAction("school")}>Check School</button>
       </div>
 
       {action === "add" && <StudentForm onSubmit={handleAddStudent} />}
-      {action === "delete" && (
-        <ul>
-          {students.map((student) => (
-            <li key={student.id}>
-              {student.name}
-              <button onClick={() => handleDeleteStudent(student.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      )}
-      {action === "update" && (
-        <ul>
-          {students.map((student) => (
-            <li key={student.id}>
-              {student.name}
-              <button
-                onClick={() =>
-                  handleUpdateStudent(student.id, prompt("Enter new name:", student.name) || student.name)
-                }
-              >
-                Update
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-      {action === "register" && (
-        <ul>
-          {students.map((student) => (
-            <li key={student.id}>
-              {student.name}
-              <select
-                onChange={(e) =>
-                  handleRegisterStudentToCourse(student.id, parseInt(e.target.value, 10))
-                }
-              >
-                <option value="">Select a course</option>
-                {courses.map((course) => (
-                  <option key={course.course_id} value={course.course_id}>
-                    {course.title}
-                  </option>
-                ))}
-              </select>
-            </li>
-          ))}
-        </ul>
-      )}
-      {action === "view" && (
-        <ul>
-          {students.map((student) => (
-            <li key={student.id}>
-              {student.name}
-              <button onClick={() => handleViewCourses(student.id)}>View Courses</button>
-            </li>
-          ))}
-        </ul>
-      )}
       {action === "school" && (
-        <ul>
-          
-          <iframe src="https://storage.googleapis.com/maps-solutions-v0osfmsiix/neighborhood-discovery/halo/neighborhood-discovery.html"
-  width="100%" height="100%"
- // style="border:0;"
-  loading="lazy">
-</iframe>
-        </ul>
+        <iframe
+          src="https://storage.googleapis.com/maps-solutions-v0osfmsiix/neighborhood-discovery/halo/neighborhood-discovery.html"
+          width="100%"
+          height="100%"
+          loading="lazy"
+        ></iframe>
       )}
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Grade</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {students.length > 0 ? (
+            students.map((student) => (
+              <tr key={student.student_id}>
+                <td>{student.name}</td>
+                <td>{student.grade_name}</td>
+                <td>
+                  <button
+                    onClick={() => {
+                      const newName = prompt("Enter new name:", student.name);
+                      const newGrade = prompt("Enter new name:", student.grade_name);
+                      if (newName && newGrade) {
+                        handleUpdateStudent(student.student_id, newName, newGrade);
+                      }
+                    }}
+                  >
+                    ✏️ Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteStudent(student.student_id)}
+                  >
+                    🗑️ Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={3}>No students found.</td>
+            </tr>
+          )}
+          
+        </tbody>
+      </table>
     </div>
   );
 };
 
 export default ParentPage;
-

@@ -1,38 +1,47 @@
 import React, { useState } from "react";
-import { StudentFormProps } from "../interfaces/StudentFormProps";
+
+interface StudentFormProps {
+  onSubmit: (name: string, grade_name: string) => Promise<void>;
+}
 
 const StudentForm: React.FC<StudentFormProps> = ({ onSubmit }) => {
-  const [name, setName] = useState("");
-  const [courseId, setCourseId] = useState<number | "">("");
+  const [name, setName] = useState<string>("");
+  const [gradeName, setGradeName] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name && courseId) {
-      onSubmit(name, Number(courseId)); // Ensure courseId is a number
+    if (name && gradeName) {
+      onSubmit(name, gradeName);
+      setName(""); // Clear form fields
+      setGradeName("");
+    } else {
+      alert("Please fill in all fields");
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="name">Student Name:</label>
+        <label htmlFor="name">Name:</label>
         <input
-          type="text"
           id="name"
+          type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          required
         />
       </div>
       <div>
-        <label htmlFor="courseId">Course ID:</label>
+        <label htmlFor="grade">Grade Name:</label>
         <input
-          type="number"
-          id="courseId"
-          value={courseId}
-          onChange={(e) => setCourseId(Number(e.target.value))}
+          id="grade"
+          type="text"
+          value={gradeName}
+          onChange={(e) => setGradeName(e.target.value)}
+          required
         />
       </div>
-      <button type="submit">Submit</button>
+      <button type="submit">Add Student</button>
     </form>
   );
 };

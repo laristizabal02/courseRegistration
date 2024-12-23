@@ -3,6 +3,8 @@ import { seedUsers } from './user-seeds.js';
 import { seedRole_types } from './role_type-seeds.js'; 
 import { seedsDepartment } from './department_seeds.js';
 import { seedsCourse } from './course_seed.js';
+import { seedsStudents } from './student_seeds.js';
+
 import sequelize from '../config/connection.js';
 
 const seedAll = async (): Promise<void> => {
@@ -24,6 +26,9 @@ const seedAll = async (): Promise<void> => {
 
     await seedsCourse();
     console.log('\n----- COURSES SEEDED -----\n');
+
+    await seedsStudents();
+    console.log('\n----- COURSES STUDENTS -----\n');
  
     process.exit(0);
   } catch (error) {
