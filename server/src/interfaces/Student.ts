@@ -1,5 +1,5 @@
-export interface Student {
-    id: number;
-    name: string;
-    courseId: number;
-  }
+export interface StudentAttributes {
+  student_id: number;
+  name: string;
+  grade_name: string; 
+}
