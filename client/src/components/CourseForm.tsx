@@ -1,38 +1,45 @@
 import React, { useState } from "react";
-import { CourseFormProps } from "../interfaces/CouseFormProps";
+import { Department } from "../interfaces/DepartmentInt";
 
-const CourseForm: React.FC<CourseFormProps> = ({ onSubmit }) => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+interface CourseFormProps {
+  onSubmit: (title: string, department_id: number) => void;
+  departments: Department[];
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (name && description) {
-      onSubmit(name, description);
-    }
+const CourseForm: React.FC<CourseFormProps> = ({ departments, onSubmit }) => {
+  const [title, setTitle] = useState("");
+  const [department_id, setDepartmentId] = useState<number>(departments[0]?.department_id || 0);
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    onSubmit(title, department_id);
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="name">Course Name:</label>
+        <label>Course Title:</label>
         <input
           type="text"
-          id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
         />
       </div>
       <div>
-        <label htmlFor="description">Course Description:</label>
-        <input
-          type="text"
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <label>Department:</label>
+        <select
+          value={department_id}
+          onChange={(e) => setDepartmentId(Number(e.target.value))}
+        >
+          {departments.map((dept) => (
+            <option key={dept.department_id} value={dept.department_id}>
+              {dept.department_name}
+            </option>
+          ))}
+        </select>
       </div>
-      <button type="submit">Submit</button>
+      <button type="submit">Add Course</button>
     </form>
   );
 };
