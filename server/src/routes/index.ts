@@ -1,12 +1,14 @@
 import apiRoutes from './api/index.js';
 import express from 'express';
 import authRoutes from './auth-routes.js';
-import coursesRoutes from './coursesRoutes.js'
-import departmentRoutes from './departmentRoutes.js'
+import coursesRoutes from './coursesRoutes.js';
+import departmentRoutes from './departmentRoutes.js';
+import studentRoutes from './studentsRoutes.js';
 import { authenticateToken } from '../middleware/auth.js';
 const router = express.Router();
 router.use('/auth', authRoutes);
 router.use('/api', authenticateToken, apiRoutes);
 router.use('/courses', coursesRoutes);
 router.use('/departments', departmentRoutes);
+router.use('/students', studentRoutes);
 export default router;
