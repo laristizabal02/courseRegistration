@@ -3,6 +3,7 @@ import { Course } from "../interfaces/CourseInt";
 import { Department } from "../interfaces/DepartmentInt";
 import CourseForm from "../components/CourseForm";
 import { useNavigate } from "react-router-dom";
+import "./pages.css";
 
 const InstructorPage: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -10,13 +11,20 @@ const InstructorPage: React.FC = () => {
   const [action, setAction] = useState<"add" | "delete" | "update" | null>(null);
   const navigate = useNavigate();
 
+  const departmentMap: { [key: number]: string } = {
+    1: "Math",
+    2: "Science",
+    3: "Arts",
+  };
+
   // Fetch all courses and departments on component mount
   useEffect(() => {
     const fetchCoursesAndDepartments = async () => {
       try {
         console.log("Fetching courses...");
-        const coursesResponse = await fetch(`http://localhost:3000/courses`);
-        console.log("hola entre!!" + coursesResponse.json());
+       // const timestamp = new Date().getTime()
+        const coursesResponse = await fetch(`http://localhost:3001/courses`);
+        console.log("hola entre!!" + coursesResponse.ok);
         if (!coursesResponse.ok) {
           throw new Error(`Error fetching courses: ${coursesResponse.statusText}`);
         }
@@ -26,7 +34,7 @@ const InstructorPage: React.FC = () => {
         
   
         console.log("Fetching departments...");
-        const departmentsResponse = await fetch(`http://localhost:3000/departments`);
+        const departmentsResponse = await fetch(`http://localhost:3001/departments`);
         if (!departmentsResponse.ok) {
           throw new Error(`Error fetching departments: ${departmentsResponse.statusText}`);
         }
@@ -51,7 +59,7 @@ const InstructorPage: React.FC = () => {
   // Add course handler
   const handleAddCourse = async (title: string, department_id: number) => {
     try {
-      const response = await fetch("http://localhost:3000/courses", {
+      const response = await fetch("http://localhost:3001/courses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, department_id }),
@@ -72,8 +80,10 @@ const InstructorPage: React.FC = () => {
 
   // Delete course handler
   const handleDeleteCourse = async (id: number) => {
+    const isConfirmed = window.confirm("Are you sure you want to delete this course?");
+    if (isConfirmed) {
     try {
-      const response = await fetch(`http://localhost:3000/courses/${id}`, { method: "DELETE" });
+      const response = await fetch(`http://localhost:3001/courses/${id}`, { method: "DELETE" });
       if (response.ok) {
         const newCourses = await response.json(); // Assuming server returns all courses
         setCourses(newCourses);
@@ -84,12 +94,13 @@ const InstructorPage: React.FC = () => {
     } catch (error) {
       console.error("Error deleting course:", error);
     }
-  };
+  }
+};
 
   // Update course handler
   const handleUpdateCourse = async (id: number, updatedTitle: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/courses/${id}`, {
+      const response = await fetch(`http://localhost:3001/courses/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: updatedTitle }),
@@ -139,7 +150,7 @@ const InstructorPage: React.FC = () => {
     courses.map((course) => (
       <tr key={course.course_id}>
         <td>{course.title}</td>
-        <td>{course.department_id}</td>
+        <td>{departmentMap[course.department_id]}</td>
         <td>
           <button
             onClick={() => {
