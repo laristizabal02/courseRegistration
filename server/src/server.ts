@@ -1,6 +1,8 @@
 import express from 'express';
 import sequelize from './config/connection.js';
 import routes from './routes/index.js';
+
+
 import './models/index.js'; // Import your models first
 import './models/role_type.js'; // Import your models first
 import './models/person.js'; // Import your models first
