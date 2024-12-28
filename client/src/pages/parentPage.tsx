@@ -70,7 +70,7 @@ const ParentPage: React.FC = () => {
   };
 
   const handleUpdateStudent = async (id: number, updatedName: string, updatedGradeName: string) => {
-    console.log("Updating student:", id, updatedName, updatedGradeName); 
+  
     if (!updatedName || !updatedGradeName.trim()) {
       alert("Both name and grade are required.");
       return;
@@ -103,8 +103,7 @@ const ParentPage: React.FC = () => {
 
       <div>
         <button onClick={() => setAction("add")}>Add Student</button>
-        <button onClick={() => setAction("register")}>Register Student to Course</button>
-        <button onClick={() => setAction("view")}>View Courses for Student</button>
+    
         <button onClick={() => setAction("school")}>Check School</button>
       </div>
 
