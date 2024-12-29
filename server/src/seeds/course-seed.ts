@@ -1,6 +1,11 @@
 import { Course } from '../models/index.js';
 
 export const seedsCourse = async () => {
+  // Check if the Courses table is empty
+  const existingCourses = await Course.findAll();
+
+  if (existingCourses.length === 0) {
+    // Only run the seeding if the table is empty
     await Course.bulkCreate(
       [
         { 
@@ -42,5 +47,10 @@ export const seedsCourse = async () => {
       ],
       { individualHooks: true }
     );
+    console.log("Courses seeded successfully.");
+} else {
+  console.log("Courses already exist. Seeding skipped.");
+}
+
   };
   

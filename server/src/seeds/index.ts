@@ -1,16 +1,16 @@
- import { seedPersons } from './person-seeds.js';
+import { seedPersons } from './person-seeds.js';
 import { seedUsers } from './user-seeds.js';
 import { seedRole_types } from './role_type-seeds.js'; 
-import { seedsDepartment } from './department_seeds.js';
-import { seedsCourse } from './course_seed.js';
-import { seedsStudents } from './student_seeds.js';
+import { seedsDepartment } from './department-seeds.js';
+import { seedsCourse } from './course-seed.js';
+import { seedsStudents } from './student-seeds.js';
 
-import sequelize from '../config/connection.js';
+//import sequelize from '../config/connection.js';
 
 const seedAll = async (): Promise<void> => {
   try {
-    await sequelize.sync({ force: true });
-    console.log('\n----- DATABASE SYNCED -----\n');
+    // await sequelize.sync({ force: true });
+    // console.log('\n----- DATABASE SYNCED -----\n');
 
      await seedRole_types();
     console.log('\n----- ROLE_TYPES SEEDED -----\n');
