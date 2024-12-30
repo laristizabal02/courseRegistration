@@ -5,7 +5,7 @@ import { Department } from "../models/department.js";
 const router = Router();
 
 // Fetch all courses (GET)
-router.get("/", async (req, res) => {
+router.get("/", async (_, res) => {
   try {
     const courses = await Course.findAll();
     return res.status(200).json(courses);

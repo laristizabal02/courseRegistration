@@ -26,7 +26,7 @@ const ParentPage: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    const isConfirmed = window.confirm("Are you sure you want to login?");
+    const isConfirmed = window.confirm("Are you sure you want to logout?");
     if (isConfirmed) {
       localStorage.removeItem("authToken");
       navigate("/login");
