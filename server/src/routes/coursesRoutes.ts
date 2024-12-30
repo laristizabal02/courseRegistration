@@ -6,7 +6,6 @@ const router = Router();
 
 // Fetch all courses (GET)
 router.get("/", async (req, res) => {
-    console.log(req);
   try {
     const courses = await Course.findAll();
     return res.status(200).json(courses);

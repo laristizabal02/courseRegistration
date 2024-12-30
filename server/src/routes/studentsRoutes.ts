@@ -5,7 +5,6 @@ const router = Router();
 
 // Fetch all students (GET)
 router.get("/", async (req, res) => {
-    console.log(req);
   try {
     const students = await Student.findAll();
     return res.status(200).json(students);
