@@ -4,7 +4,7 @@ import { Department } from '../models/department.js'; // Adjust path as necessar
 const router = express.Router();
 
 // GET all departments
-router.get('/', async (req, res) => {
+router.get('/', async (_, res) => {
   try {
     const departments = await Department.findAll(); // Adjust if using other ORM methods
     res.status(200).json(departments);

@@ -4,7 +4,7 @@ import { Student } from "../models/student.js";
 const router = Router();
 
 // Fetch all students (GET)
-router.get("/", async (req, res) => {
+router.get("/", async (_, res) => {
   try {
     const students = await Student.findAll();
     return res.status(200).json(students);
