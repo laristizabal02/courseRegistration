@@ -5,7 +5,6 @@ const router = express.Router();
 
 // GET all departments
 router.get('/', async (req, res) => {
-    console.log(req);
   try {
     const departments = await Department.findAll(); // Adjust if using other ORM methods
     res.status(200).json(departments);
