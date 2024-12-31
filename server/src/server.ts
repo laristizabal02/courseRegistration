@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import sequelize from './config/connection.js';
@@ -23,7 +23,8 @@ const PORT = process.env.PORT || 3001;
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Adjust for Render
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Adjust for deployment
+    credentials: true, // Allow credentials like cookies if needed
   })
 );
 
@@ -35,13 +36,28 @@ app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
 // Serve React frontend
-const clientBuildPath = path.join(__dirname, '../../client/build');
+const clientBuildPath = path.resolve(__dirname, '../../client/build');
 app.use(express.static(clientBuildPath));
 
 // Fallback route to serve React app
-app.get('*', (_, res) => {
-  res.sendFile(path.resolve(clientBuildPath, 'index.html'));
+app.get('*', (_: Request, res: Response) => {
+  res.sendFile(path.join(clientBuildPath, 'index.html'));
 });
+
+// Global error handling middleware
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+  console.error('Error:', err.stack || err.message);
+  res.status(500).json({ error: 'Internal Server Error', message: err.message });
+});
+
+// Test database connection
+sequelize
+  .authenticate()
+  .then(() => console.log('Database connected successfully'))
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err);
+    process.exit(1); // Exit if the database connection fails
+  });
 
 // Sync Sequelize and start the server
 sequelize
@@ -52,5 +68,5 @@ sequelize
     });
   })
   .catch((err) => {
-    console.error('Error connecting to the database:', err);
+    console.error('Error during Sequelize sync:', err);
   });
