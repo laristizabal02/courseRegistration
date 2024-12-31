@@ -4,6 +4,12 @@ import { fileURLToPath } from 'url';
 import sequelize from './config/connection.js';
 import routes from './routes/index.js';
 import cors from 'cors';
+import './models/index.js'; // Import your models first
+import './models/role_type.js'; // Import your models first
+import './models/person.js'; // Import your models first
+import './models/user.js'; // Import your models first
+import './models/student.js'; // Import your models first
+import './models/associations.js'; // Import associations after models
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -15,6 +21,12 @@ const __dirname = path.dirname(__filename);
 
 // Initialize the Express app
 const app = express();
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+// Catch-all handler for serving React app
+app.get('*', (_, res) => {//req is not used so typescript flagged it
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
 const PORT = process.env.PORT || 3001;
 
 // Middleware
