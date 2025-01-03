@@ -27,7 +27,7 @@ router.use('/departments', departmentRoutes);
 router.use('/students', studentRoutes);
 
 // Fallback route for React frontend
-router.get('*', (_, res) => {
+router.get('/', (_, res) => {
 //  const clientBuildPath = path.join(__dirname, '../client/build');
   res.sendFile(path.resolve('../client/dist', 'index.html'));
 });
