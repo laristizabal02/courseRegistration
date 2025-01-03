@@ -5,7 +5,7 @@ import coursesRoutes from './coursesRoutes.js';
 import departmentRoutes from './departmentRoutes.js';
 import studentRoutes from './studentsRoutes.js';
 import { authenticateToken } from '../middleware/auth.js';
-import path from 'path';
+//import path from 'path';
 
 const router = express.Router();
 
@@ -27,9 +27,9 @@ router.use('/departments', departmentRoutes);
 router.use('/students', studentRoutes);
 
 // Fallback route for React frontend
-router.get('/', (_, res) => {
+/*router.get('/', (_, res) => {
 //  const clientBuildPath = path.join(__dirname, '../client/build');
   res.sendFile(path.resolve('../client/dist', 'index.html'));
-});
+});*/
 
 export default router;

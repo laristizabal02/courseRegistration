@@ -1,7 +1,7 @@
 import PrivateRoute from './utils/PrivateRoutes.tsx';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap styles
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 import ErrorPage from './pages/error.tsx';
 import Login from './pages/login.tsx';
 import './index.css'
