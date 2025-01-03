@@ -1,5 +1,5 @@
 import express from 'express';
-import path from 'path';
+//import path from 'path';
 //import { fileURLToPath } from 'url';
 import sequelize from './config/connection.js';
 import routes from './routes/index.js';
@@ -39,10 +39,11 @@ app.use(routes);
 app.use(express.static("../client/dist"));
 
 // Fallback route to serve React app
+/*
 app.get('*', (_, res) => {
   res.sendFile(path.resolve("../client/dist", 'index.html'));
 });
-
+*/
 // Sync Sequelize and start the server
 sequelize
   .sync({ force: false })

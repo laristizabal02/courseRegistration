@@ -10,9 +10,10 @@ import path from 'path';
 const router = express.Router();
 
 // Root route (optional for API message)
+/*
 router.get('/', (_, res) => {
     res.send('Welcome to the Course Registration API');
-  });
+  });*/
 
 // Auth routes
 router.use('/auth', authRoutes);
@@ -27,8 +28,8 @@ router.use('/students', studentRoutes);
 
 // Fallback route for React frontend
 router.get('*', (_, res) => {
-  const clientBuildPath = path.join(__dirname, '../../client/build');
-  res.sendFile(path.resolve(clientBuildPath, 'index.html'));
+//  const clientBuildPath = path.join(__dirname, '../client/build');
+  res.sendFile(path.resolve('../client/dist', 'index.html'));
 });
 
 export default router;
