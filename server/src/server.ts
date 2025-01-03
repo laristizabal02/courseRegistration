@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
+//import { fileURLToPath } from 'url';
 import sequelize from './config/connection.js';
 import routes from './routes/index.js';
 import cors from 'cors';
@@ -14,8 +14,8 @@ import './models/student.js';
 import './models/associations.js';
 
 // Define __dirname for ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+//const __filename = fileURLToPath(import.meta.url);
+//const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -35,12 +35,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(routes);
 
 // Serve React frontend
-const clientBuildPath = path.join(__dirname, '../../client/build');
-app.use(express.static(clientBuildPath));
+//const clientBuildPath = path.join(__dirname, '../../client/build');
+app.use(express.static("../client/dist"));
 
 // Fallback route to serve React app
 app.get('*', (_, res) => {
-  res.sendFile(path.resolve(clientBuildPath, 'index.html'));
+  res.sendFile(path.resolve("../client/dist", 'index.html'));
 });
 
 // Sync Sequelize and start the server
