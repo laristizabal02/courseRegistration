@@ -12,7 +12,7 @@ const ParentPage: React.FC = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await fetch("http://localhost:3001/students");
+        const response = await fetch("/students");
         if (!response.ok) {
           throw new Error("Error fetching students");
         }
@@ -35,7 +35,7 @@ const ParentPage: React.FC = () => {
 
   const handleAddStudent = async (name: string, grade_name: string) => {
     try {
-      const response = await fetch("http://localhost:3001/students", {
+      const response = await fetch("/students", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, grade_name }),
@@ -54,7 +54,7 @@ const ParentPage: React.FC = () => {
     const isConfirmed = window.confirm("Are you sure you want to delete this student?");
     if (isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3001/students/${id}`, { method: "DELETE" });
+        const response = await fetch(`/students/${id}`, { method: "DELETE" });
   
         if (response.ok) {
           const updatedStudents = await response.json(); // Assuming the server returns all students
@@ -77,7 +77,7 @@ const ParentPage: React.FC = () => {
     }
   
     try {
-      const response = await fetch(`http://localhost:3001/students/${id}`, {
+      const response = await fetch(`/students/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: updatedName, grade_name: updatedGradeName }),
