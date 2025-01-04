@@ -20,14 +20,14 @@ const InstructorPage: React.FC = () => {
   useEffect(() => {
     const fetchCoursesAndDepartments = async () => {
       try {
-        const coursesResponse = await fetch(`http://localhost:3001/courses`);
+        const coursesResponse = await fetch(`/courses`);
         if (!coursesResponse.ok) {
           throw new Error(`Error fetching courses: ${coursesResponse.statusText}`);
         }
         const coursesData = await coursesResponse.json();
         setCourses(coursesData);
 
-        const departmentsResponse = await fetch(`http://localhost:3001/departments`);
+        const departmentsResponse = await fetch(`/departments`);
         if (!departmentsResponse.ok) {
           throw new Error(`Error fetching departments: ${departmentsResponse.statusText}`);
         }
@@ -51,7 +51,7 @@ const InstructorPage: React.FC = () => {
   const handleAddCourse = async (title: string, department_id: number) => {
     console.log(title, department_id);
     try {
-      const response = await fetch("http://localhost:3001/courses", {
+      const response = await fetch("/courses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, department_id }),
@@ -63,14 +63,14 @@ const InstructorPage: React.FC = () => {
         window.confirm("It was added succesfully");
         const fetchCoursesAndDepartments = async () => {
           try {
-            const coursesResponse = await fetch(`http://localhost:3001/courses`);
+            const coursesResponse = await fetch(`/courses`);
             if (!coursesResponse.ok) {
               throw new Error(`Error fetching courses: ${coursesResponse.statusText}`);
             }
             const coursesData = await coursesResponse.json();
             setCourses(coursesData);
     
-            const departmentsResponse = await fetch(`http://localhost:3001/departments`);
+            const departmentsResponse = await fetch(`/departments`);
             if (!departmentsResponse.ok) {
               throw new Error(`Error fetching departments: ${departmentsResponse.statusText}`);
             }
@@ -92,7 +92,7 @@ const InstructorPage: React.FC = () => {
 
   const handleUpdateCourse = async (id: number, updatedTitle: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/courses/${id}`, {
+      const response = await fetch(`/courses/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: updatedTitle }),
@@ -114,7 +114,7 @@ const InstructorPage: React.FC = () => {
     const isConfirmed = window.confirm("Are you sure you want to delete this course?");
     if (isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:3001/courses/${id}`, { method: "DELETE" });
+        const response = await fetch(`/courses/${id}`, { method: "DELETE" });
         if (response.ok) {
           const newCourses = await response.json(); // Assuming server returns all courses
           setCourses(newCourses);
