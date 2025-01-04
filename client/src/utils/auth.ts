@@ -1,5 +1,6 @@
 import { type JwtPayload, jwtDecode } from 'jwt-decode';
 
+
   class AuthService {
         getProfile() {
           // Decode the JSON Web Token (JWT) using the jwtDecode function, specifying the expected payload type as UserData.
@@ -36,13 +37,13 @@ import { type JwtPayload, jwtDecode } from 'jwt-decode';
     // Store the JWT token in localStorage and redirect to the home page
     login(idToken: string) {
       localStorage.setItem('id_token', idToken);
-      window.location.assign('/');
+     // window.location.assign('/');
     }
   
     // Remove the JWT token from localStorage and redirect to the home page
     logout() {
       localStorage.removeItem('id_token');
-      window.location.assign('/');
+     // window.location.assign('/');
     }
   }
   

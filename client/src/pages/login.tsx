@@ -2,6 +2,8 @@ import { Form, Button } from 'react-bootstrap';
 import { useState, FormEvent, ChangeEvent } from "react";
 import { login } from "../api/authAPI";  // Import the login function from the API
 import { UserLogin } from "../interfaces/UserLogin";
+import { useNavigate } from "react-router-dom";
+
 
 //import { Prev } from 'react-bootstrap/esm/PageItem';
 
@@ -13,7 +15,7 @@ const Login: React.FC = () => {
     password: '',
     role_type_id: 'instructor' // Default role
   });
-
+  let navigate = useNavigate();
   // Handle input changes for the login form
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -47,9 +49,9 @@ const Login: React.FC = () => {
   
       // Redirect based on roleTypeId
       if (roleTypeId === 1) {
-        window.location.assign('/instructor');
+        navigate('/instructor');
       } else if (roleTypeId === 2) {
-        window.location.assign('/parent');
+        navigate('/parent');
       }
     } catch (err) {
       console.error('Failed to login', err);
