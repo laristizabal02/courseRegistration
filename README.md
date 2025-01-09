@@ -10,14 +10,13 @@ This application provides a starting point for providing a valuable for before a
 This project allowed us to learn about selecting technologies to construct a full stack application and how to integrate them as seamlessly as possible. 
 
 
-## Table of Contents (Optional)
+## Table of Contents
 
-If your README is long, add a table of contents to make it easy for users to find what they need.
-
+- [Technologies Used](#technologies-used)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Credits](#credits)
-- [License](#license)
+- [Authors](#authors-🔑)
+- [Built With](#built-with-🌱)
 
 ## Technologies Used
 ### Client and Server 
@@ -71,16 +70,75 @@ JWT_SECRET_KEY=TypeYourSecretHere`
 
 ## Usage
 To run in production:
-- [Course Registation](https://courseregistration-pex9.onrender.com/login)
-- This displays the Course Registration Login screen
-<img src="./assets/images/loginScreenshot.png" alt="Login" width="400">
-Provide instructions and examples for use. Include screenshots as needed.
+- Click on the link: [Course Registration](https://courseregistration-pex9.onrender.com/)
+- This displays the Course Registration Login screen.
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
+  ![Login Screen](./assets/images/loginScreenshot.png)
 
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
+### Two Login Types:
+#### Instructor Username: Dr.Science Password: password
+1. Enter the username and password.
+2. Click the "Login" Button.
+3. The Instructor Dashboard displays.
+
+   ![Instructor Dashboard](./assets/images/instructorDashboardScreenshot.png)
+
+4. To edit a course:
+   - Click on the edit icon next to the course title and department.
+   
+     ![Edit Course](./assets/images/edit-Delete-Screenshot.png)
+
+   - Answer the nrw title prompt.
+     
+     ![Edit Prompt](./assets/images/course-Edit-Prompt-Screenshot.png)
+
+5. To delete a course, confirm the deletion prompt.
+     
+     ![Delete Prompt](./assets/images/course-Delete-Prompt-Screenshot.png)
+
+6. To add a new course, click on the "Add New Course" button.
+     
+     ![Add Course Button](./assets/images/Add-new-course-button-Screenshot.png)
+
+---
+#### Parent/Guardian Username: SuperMom Password: password
+1. Enter the username and password.
+2. Click the "Login" Button.
+3. The Parent Dashboard displays.
+
+   ![Parent Dashboard](./assets/images/parentDashboardScreenshot.png)
+
+4. To edit a student:
+   - Click on the edit icon next to the student name and grade.
+   
+     ![Edit Student](./assets/images/edit-Delete-Screenshot.png)
+
+   - Answer the name and grade prompts.
+     
+     ![Edit Prompt](./assets/images/name-Edit-Prompt-Screenshot.png)
+
+5. To delete a student, confirm the deletion prompt.
+     
+     ![Delete Prompt](./assets/images/student-Delete-Prompt-Screenshot.png)
+
+6. To add a new student, click on the "Add Student" button.
+     
+    ![Add Student Button](./assets/images/Add-new-student-button-Screenshot.png)
+
+- Fill in the name and grade fields, then click "Add Student" button below the name and grade fiels.
+
+     
+     ![Add Student Prompts](./assets/images/add-New-Student-Prompts-Screenshot.png)
+
+7. To view nearby schools, click on the "Check School" button.
+    
+    ![Check School Button](./assets/images/Add-new-student-button-Screenshot.png)
+
+8. To logout, Click on the logout button:
+    ![Logout Button](./assets/images/logout-button-Screenshot.png)
+
+
+
 
 ## Authors 🔑
 
@@ -93,8 +151,6 @@ System Architects:
 This project is licensed under the MIT License © 2025 Laura Aristizabal and Steven Gray . See the [LICENSE](LICENSE) file for details.
 
 ---
-
-🏆 The previous sections are the bare minimum, and your project will ultimately determine the content of this document. You might also want to consider adding the following sections.
 
 ## Built With 🌱
 ### Client and Server 
@@ -113,7 +169,3 @@ This project is licensed under the MIT License © 2025 Laura Aristizabal and Ste
 ### API
 [![Google Maps API Badge](https://img.shields.io/badge/Google%20Maps%20API-Enabled-green)](https://developers.google.com/maps)
 
-
-## Features
-
-If your project has a lot of features, list them here.
